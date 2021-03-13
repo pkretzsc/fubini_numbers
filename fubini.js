@@ -1,11 +1,7 @@
-const express = require('express');
-const app = express();
-
-app.get('/', (req,res)=> {
-  let fubino = (function() {
+let fubino = (function() {
     // step 1: a basic LUT with a few steps of Pascal's triangle
     var binomials = [
-      [BigInt(1)],
+      [1n],
       [1,1],
       [1,2,1],
       [1,3,3,1],
@@ -62,13 +58,10 @@ app.get('/', (req,res)=> {
   }());
   // console.log(fubino(15n,15n).toString(10))
     //   var t0 = performance.now()
-      //  console.log(fubino(3500n).toString(10));
+    const n = BigInt(process.env.INPUT);
+    // console.log(n);
+       console.log(fubino(n));
+      //  console.log(fubino(500n).toString(10))
     //   var t1 = performance.now()
       // console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.")
     
-    res.send(fubino(100n).toString(10))});
-
-app.listen(3000, () => {
-    console.log('My Rest API is running on port 3000')
-
-})

@@ -1,10 +1,10 @@
 {
   "name": "fubini_numbers",
-  "version": "1.0.0",
+  "version": "14.15.4",
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "node fubini.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
