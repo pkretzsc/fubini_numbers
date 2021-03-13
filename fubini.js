@@ -14,26 +14,25 @@ let fubino = (function() {
   
     // step 2: a function that builds out the LUT if it needs to.
     function binomial(n,k) {
+      
       while(n >= BigInt(binomials.length)) {
+        console.log(binomials);
         let s = BigInt(binomials.length);
         // binomials.push([...Array(s+1)].map((_, i) => i == 0 || i == s ? 1 : binomials[s-1][i-1] + binomials[s-1][i]));
         // binomials.push(new Array(s+1).fill(0n).map((_, BigInt(i)) => i == 0 || i == s ? 1 : binomials[s-1][i-1] + binomials[s-1][i]));
-        let nextRow = [];
-        nextRow[0] = 1n;
+        let nextRow = [1n];
+        // nextRow[0] = 1n;
         let half = s/2n;
         for(let i=1n, prev=s-1n; i < half+1n; i++) {
           nextRow[i] = BigInt(binomials[prev][i-1n] + binomials[prev][i]);
         }
         
         if(s%2n == 0n){
-          // var leftSide = nextRow.slice(0,Number(half));
-          // var fullRow = nextRow.concat(nextRow.slice(0,Number(half)).reverse());
           binomials.push(nextRow.concat(nextRow.slice(0,Number(half)).reverse()));
           
         
 
         }else{
-          // var fullRow = nextRow.concat(nextRow.slice(0,Number(half+1n)).reverse());
           binomials.push(nextRow.concat(nextRow.slice(0,Number(half+1n)).reverse()))
         }
         // console.log(fullRow.toString(10),'second')
