@@ -1,66 +1,46 @@
-let fubino = (function() {
-    // step 1: a basic LUT with a few steps of Pascal's triangle
-    var binomials = [
-      [1n],
-      [1,1],
-      [1,2,1],
-      [1,3,3,1],
-      [1,4,6,4,1],
-      [1,5,10,10,5,1],
-      [1,6,15,20,15,6,1],
-      [1,7,21,35,35,21,7,1],
-      [1n,8n,28n,56n,70n,56n,28n,8n,1n]
-    ];
-  
-    // step 2: a function that builds out the LUT if it needs to.
-    function binomial(n,k) {
-      
-      while(n >= BigInt(binomials.length)) {
-        console.log(binomials);
-        let s = BigInt(binomials.length);
-        // binomials.push([...Array(s+1)].map((_, i) => i == 0 || i == s ? 1 : binomials[s-1][i-1] + binomials[s-1][i]));
-        // binomials.push(new Array(s+1).fill(0n).map((_, BigInt(i)) => i == 0 || i == s ? 1 : binomials[s-1][i-1] + binomials[s-1][i]));
-        let nextRow = [1n];
-        // nextRow[0] = 1n;
-        let half = s/2n;
-        for(let i=1n, prev=s-1n; i < half+1n; i++) {
-          nextRow[i] = BigInt(binomials[prev][i-1n] + binomials[prev][i]);
-        }
-        
-        if(s%2n == 0n){
-          binomials.push(nextRow.concat(nextRow.slice(0,Number(half)).reverse()));
-          
-        
+let fubino = (function () {
+  var binomials = [1n]; //creating arr to store already calculated binomial numbers
+  function binomial(n, k) {
+    //getting binomial number n over k
+    while (n >= BigInt(binomials.length)) {
+      //adding new layer if needed
+      let s = BigInt(binomials.length);
+      let nextRow = [1n];
+      let half = s / 2n;
+      for (let i = 1n, prev = s - 1n; i < half + 1n; i++) {
+        //only calucating first half
+        nextRow[i] = BigInt(binomials[prev][i - 1n] + binomials[prev][i]);
+      }
+      if (s % 2n == 0n) {
+        //concat other half depending on layer length
+        binomials.push(
+          nextRow.concat(nextRow.slice(0, Number(half)).reverse())
+        );
+      } else {
+        binomials.push(
+          nextRow.concat(nextRow.slice(0, Number(half + 1n)).reverse())
+        );
+      }
+    }
+    return binomials[n][k];
+  }
 
-        }else{
-          binomials.push(nextRow.concat(nextRow.slice(0,Number(half+1n)).reverse()))
-        }
-        // console.log(fullRow.toString(10),'second')
-        // binomials.push(fullRow);
+  function fubini(n) {
+    //calculating fubini
+    let arr = [1n];
+    for (let i = 1n; i < n; i++) {
+      //calculate every fubini to n
+      let sum = 0n;
+      for (let j = 1n; j <= i; j++) {
+        //using regressive sum formular
+        sum += BigInt(binomial(i, j)) * arr[i - j];
       }
-      return binomials[n][k];
-    }
-  
-    function fubini(n){
-      let arr = [1n];
-      for(let i = 1n; i < n; i++){
-        let sum = 0n;
-        for(let j = 1n; j <= i; j++){
-          sum += BigInt(binomial(i,j)) * arr[i-j]
-        }
       arr[i] = sum;
-      }
-      return arr;
     }
-    return fubini;
-    
-  }());
-  // console.log(fubino(15n,15n).toString(10))
-    //   var t0 = performance.now()
-    const n = BigInt(process.env.INPUT);
-    // console.log(n);
-       console.log(fubino(n));
-      //  console.log(fubino(500n).toString(10))
-    //   var t1 = performance.now()
-      // console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.")
-    
+    return arr;
+  }
+  return fubini;
+})();
+
+const n = BigInt(process.env.INPUT); //getting input from console
+console.log(fubino(n).toString(10)); //output
